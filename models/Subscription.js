@@ -26,6 +26,9 @@ let subscriptionSchema = new Schema({
   note: {
     type: String,
   },
+  userId: {
+    type: String,
+  },
 });
 
 let Subscription = mongoose.model('subscription', subscriptionSchema);

@@ -23,14 +23,11 @@ mongoose
   });
 
 module.exports = async function () {
-
   const client = mongoose.connection;
   client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
   async function getAllSubs(accountId) {
-    let subs = await Subscription.find()
-      // .where('userId').equals(accountId) // add to select by account
-      ;
+    let subs = await Subscription.find().where('userId').equals(accountId);
     return {
       msg: `Successfully retrieved subscriptions`,
       subs,
@@ -38,7 +35,7 @@ module.exports = async function () {
   }
 
   async function addNewSub(form, accountId) {
-    let sub = new Subscription(form);
+    let sub = new Subscription({ ...form, userId: accountId });
     sub = await sub.save();
     return {
       msg: `Successfully added new subscription ${form.title}!`,
@@ -50,20 +47,29 @@ module.exports = async function () {
     let sub = await Subscription.findByIdAndUpdate(subId, form, {
       new: true,
     });
-    return {
-      msg: `Successfully updated subscription ${form.title}!`,
-      sub,
-    };
+    if (sub) {
+      return {
+        msg: `Successfully updated subscription ${form.title}!`,
+        sub,
+      };
+    } else {
+      return {
+        msg: `Subscription with id ${subId} was not found!`,
+      };
+    }
   }
 
   async function deleteSub(subId, accountId) {
-    const queryOptions = { sub_id: subId };
-    let sub = await Subscription.findByIdAndURemove(subId, form, {
-      new: true,
-    });
-    return {
-      msg: `Successfully updated subscription with id ${queryOptions.sub_id}!`,
-    };
+    let sub = await Subscription.findByIdAndRemove(subId);
+    if (sub) {
+      return {
+        msg: `Successfully deleted subscription with id ${subId}!`,
+      };
+    } else {
+      return {
+        msg: `Subscription with id ${subId} was not found!`,
+      };
+    }
   }
 
   return { getAllSubs, addNewSub, updateSub, deleteSub };
