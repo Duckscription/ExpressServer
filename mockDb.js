@@ -37,7 +37,7 @@ module.exports = async function () {
     };
   }
 
-  async function updateSub(form, accountId) {
+  async function updateSub(subId, form, accountId) {
     return {
       msg: `Successfully updated subscription ${form.title}!`,
     };
