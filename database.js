@@ -28,7 +28,9 @@ module.exports = async function () {
   client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
   async function getAllSubs(accountId) {
-    let subs = await Subscription.find();
+    let subs = await Subscription.find()
+      // .where('userId').equals(accountId) // add to select by account
+      ;
     return {
       msg: `Successfully retrieved subscriptions`,
       subs,
@@ -43,9 +45,13 @@ module.exports = async function () {
     };
   }
 
-  async function updateSub(form, accountId) {
+  async function updateSub(subId, form, accountId) {
+    let sub = await Subscription.findByIdAndUpdate(subId, form, {
+      new: true,
+    });
     return {
       msg: `Successfully updated subscription ${form.title}!`,
+      sub,
     };
   }
 
