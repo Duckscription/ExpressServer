@@ -42,6 +42,7 @@ module.exports = async function () {
     sub = await sub.save();
     return {
       msg: `Successfully added new subscription ${form.title}!`,
+      sub,
     };
   }
 
@@ -57,6 +58,9 @@ module.exports = async function () {
 
   async function deleteSub(subId, accountId) {
     const queryOptions = { sub_id: subId };
+    let sub = await Subscription.findByIdAndURemove(subId, form, {
+      new: true,
+    });
     return {
       msg: `Successfully updated subscription with id ${queryOptions.sub_id}!`,
     };
