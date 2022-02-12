@@ -28,6 +28,6 @@ let subscriptionSchema = new Schema({
   },
 });
 
-let Subscription = mongoose.model('subscription', scubscriptionSchema);
+let Subscription = mongoose.model('subscription', subscriptionSchema);
 
 module.exports = Subscription;
