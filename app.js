@@ -34,6 +34,18 @@ module.exports = function (database) {
     }
   });
 
+  app.get('/api/subs/:id', async (req, res) => {
+    const subId = req.params.id;
+    try {
+      const result = await database.getSub(subId, accountId);
+      console.log(result);
+      res.send(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error });
+    }
+  });
+
   app.post('/api/subs/add', async (req, res) => {
     const subInfo = req.body;
     console.log('this is the subInfo', subInfo);

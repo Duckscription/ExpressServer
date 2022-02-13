@@ -34,6 +34,14 @@ module.exports = async function () {
     };
   }
 
+  async function getSub(subId, accountId) {
+    let sub = await Subscription.findById(subId);
+    return {
+      msg: `Successfully retrieved subscription with id ${subId}`,
+      sub,
+    };
+  }
+
   async function addNewSub(form, accountId) {
     let sub = new Subscription({ ...form, userId: accountId });
     sub = await sub.save();
@@ -72,5 +80,5 @@ module.exports = async function () {
     }
   }
 
-  return { getAllSubs, addNewSub, updateSub, deleteSub };
+  return { getAllSubs, getSub, addNewSub, updateSub, deleteSub };
 };
