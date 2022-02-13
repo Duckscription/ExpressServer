@@ -116,7 +116,7 @@ module.exports = function (database) {
 
   /** Render react files **/
 
-  app.get('*', requiresAuth(), (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'));
   });
 
