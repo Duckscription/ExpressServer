@@ -2,8 +2,8 @@ const makeApp = require('./app.js');
 require('dotenv').config();
 
 // Database setup
-const makeDatabase = require('./database');
-// const makeMockDb = require('./mockDb');
+const makeDatabase = require('./db/database');
+const makeMockDb = require('./db/mockDb');
 
 // change between makeMockData and makeDatabase to switch between mock and real db
 makeDatabase().then((database) => {

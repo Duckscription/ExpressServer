@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Subscription = require('./models/Subscription');
+const Subscription = require('../models/Subscription');
 
 mongoose.Promise = global.Promise;
 // mongoose.set('useNewUrlParser', true);
