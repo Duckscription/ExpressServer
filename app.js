@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
-const { auth, requiresAuth } = require('express-openid-connect');
+// const jwt = require('express-jwt');
+// const jwks = require('jwks-rsa');
+// const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config();
 
 const config = {
@@ -12,27 +14,40 @@ const config = {
   issuerBaseURL: process.env.AUTH0_BASE_URL,
 };
 
+// const jwtCheck = jwt({
+//   secret: jwks.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: process.env.JWKS_URI,
+//   }),
+//   audience: process.env.AUDIENCE,
+//   issuer: process.env.ISSUER,
+//   algorithms: ['RS256'],
+// });
+
 module.exports = function (database) {
   const app = express();
 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-  app.use(auth(config));
+  // app.use(auth(config));
+  // app.use(jwtCheck);
 
   // serve the react app if request to /
   app.use(express.static(path.join(__dirname, 'build')));
 
   /** Auth0 Routes **/
-  app.post('/callback', (req, res) => {
-    // store user in the database if doesnt already exist
-    console.log('wow redirecting... is this even being called?');
-    const { id_token, state } = req.body;
-    res.send({ id_token, state });
-  });
+  // app.post('/callback', (req, res) => {
+  //   // store user in the database if doesnt already exist
+  //   console.log('wow redirecting... is this even being called?');
+  //   const { id_token, state } = req.body;
+  //   res.send({ id_token, state });
+  // });
 
-  app.get('/api/profile', requiresAuth(), (req, res) => {
-    res.send({ ...req.oidc?.user });
-  });
+  // app.get('/api/profile', requiresAuth(), (req, res) => {
+  //   res.send({ ...req.oidc?.user });
+  // });
 
   /** CRUD Routes **/
   const accountId = '1asd'; // hardcoded for now
