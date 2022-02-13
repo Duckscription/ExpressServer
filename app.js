@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const { auth } = require('express-openid-connect');
+const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config();
 
 const config = {
@@ -23,15 +23,16 @@ module.exports = function (database) {
   app.use(express.static(path.join(__dirname, 'build')));
 
   /** Auth0 Routes **/
-  // app.post('/callback', (req, res) => {
-  //   // store user in the database if doesnt already exist
-  //   const { id_token, state } = req.body;
-  //   res.send({ id_token, state });
-  // });
+  app.post('/callback', (req, res) => {
+    // store user in the database if doesnt already exist
+    console.log('wow redirecting... is this even being called?');
+    const { id_token, state } = req.body;
+    res.send({ id_token, state });
+  });
 
-  // app.get('/api/profile', checkAuth, (req, res) => {
-  //   res.send({ ...req.oidc?.user });
-  // });
+  app.get('/api/profile', requiresAuth(), (req, res) => {
+    res.send({ ...req.oidc?.user });
+  });
 
   /** CRUD Routes **/
   const accountId = '1asd'; // hardcoded for now
@@ -100,7 +101,7 @@ module.exports = function (database) {
 
   /** Render react files **/
 
-  app.get('*', (req, res) => {
+  app.get('*', requiresAuth(), (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'));
   });
 
